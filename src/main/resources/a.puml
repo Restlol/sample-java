@@ -1,0 +1,29 @@
+@startuml
+skinparam backgroundColor #EEEBDC
+skinparam handwritten true
+
+title __**易恒 Devops 流程**__
+actor 开发人员 as developer #grey
+participant 客户代码仓库系统 as gitlab #CCCC00
+participant  "客户持续集成工具 jenkins" as jenkins #CCCC00
+participant  "安般Devops套件" as python  #00994D
+participant 安般模糊测试系统 as anban  #00994D
+participant 安般模糊测试引擎系统 as engine #00994D
+participant 客户bug系统 as bug #CCCC00
+
+== CI / CD 动作 ==
+
+developer -> gitlab: 代码提交
+gitlab -> jenkins: 触发webhook,发送构建请求
+
+jenkins ->> jenkins: 执行项目构建等操作
+
+jenkins -> python: 调用安般Devops套件
+python -> anban: 依据既定规则,\n收集安般模糊测试系统所需要的输入
+anban -> engine: 与引擎进行交互
+engine ->> engine : 进行模糊测试
+
+== 测试结果输出 ==
+engine --> anban: 持续地进行模糊测试结果反馈,\n可登录到安般模糊测试系统进行查看
+anban --> bug: 模糊测试反馈的bug进行同步
+@enduml
